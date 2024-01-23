@@ -1,0 +1,17 @@
+super, background, traffic light
+super, background, terrain
+equal, bus, bus
+equal, car, car
+equal, bicycle, bicycle
+super, background, traffic sign
+equal, motorbike, motorcycle
+super, background, wall
+equal, train, train
+super, person, person
+super, person, rider
+super, background, vegetation
+super, background, sidewalk
+super, background, fence
+super, background, pole
+super, background, building
+super, background, sky

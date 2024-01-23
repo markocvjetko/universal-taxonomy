@@ -1,0 +1,8 @@
+reproduce quarter resolution
+    - /run/media/matoototo/linux/data/ml/experiments/080522/2022_05_08_14_18_04_rn18_quarter_resolution
+    - 70.75% mIU
+PASCAL test run
+    - /run/media/matoototo/linux/data/ml/experiments/080522/2022_05_08_20_50_01_rn18_quarter_resolution_pascal
+    - 59.86% mIU
+
+
