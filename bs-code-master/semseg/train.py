@@ -9,7 +9,7 @@ from shutil import copy
 import pickle
 from time import perf_counter
 
-from swiftnet.evaluation import evaluate_semseg
+from semseg.evaluation import evaluate_semseg
 
 
 def import_module(path):
@@ -113,6 +113,7 @@ class Trainer:
                 batch_iterator = iter(enumerate(self.loader_train))
                 start_t = perf_counter()
                 for step, batch in batch_iterator:
+                    print(torch.unique(batch['labels']))
                     self.optimizer.zero_grad()
                     loss = self.model.loss(batch)
                     loss.backward()
@@ -142,7 +143,7 @@ class Trainer:
 
 
 parser = argparse.ArgumentParser(description='Detector train')
-parser.add_argument('--config', default='/home/mc/dipl-rad/bs-code-master/semseg/configs/rn18_single_scale.py', type=str, help='Path to configuration .py file')
+parser.add_argument('--config', default='/home/mc/dipl-rad/msc-thesis/bs-code-master/semseg/configs/rn18_single_scale.py', type=str, help='Path to configuration .py file')
 parser.add_argument('--store_dir', default='saves/', type=str, help='Path to experiments directory')
 parser.add_argument('--resume', default=None, type=str, help='Path to existing experiment dir')
 parser.add_argument('--no-log', dest='log', action='store_false', help='Turn off logging')

@@ -21,7 +21,7 @@ path = os.path.abspath(__file__)
 dir_path = os.path.dirname(path)
 
 evaluating = False                      # put to True if using the config only for evaluation of already trained model
-random_crop_size = 768                  # crop size, adjust it if having problems with GPU capacity
+random_crop_size = 448                  # crop size, adjust it if having problems with GPU capacity
 
 scale = 1
 mean = [73.15, 82.90, 72.3]             # Imagenet parameters, adjust for different datasets and initialization
@@ -36,8 +36,8 @@ mapping = Cityscapes.map_to_id
 
 target_size_crops = (random_crop_size, random_crop_size)
 target_size_crops_feats = (random_crop_size // 4, random_crop_size // 4)
-target_size = (2048, 1024)              # resolution of final feature map, with this it is on full resolution
-target_size_feats = (2048 // 4, 1024 // 4)
+target_size = (1024, 512)              # resolution of final feature map, with this it is on full resolution
+target_size_feats = (1024 // 4, 512 // 4)
 
 eval_each = 4                           # frequency of validation process, it will be each 4 epochs
 

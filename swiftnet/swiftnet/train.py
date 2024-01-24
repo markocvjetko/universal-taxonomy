@@ -142,7 +142,7 @@ class Trainer:
 
 
 parser = argparse.ArgumentParser(description='Detector train')
-parser.add_argument('--config', default='/home/mc/dipl-rad/swiftnet/swiftnet/configs/rn18_single_scale.py', type=str, help='Path to configuration .py file')
+parser.add_argument('--config', default='/home/mc/dipl-rad/msc-thesis/swiftnet/swiftnet/configs/rn18_pascal.py', type=str, help='Path to configuration .py file')
 parser.add_argument('--store_dir', default='saves/', type=str, help='Path to experiments directory')
 parser.add_argument('--resume', default=None, type=str, help='Path to existing experiment dir')
 parser.add_argument('--no-log', dest='log', action='store_false', help='Turn off logging')

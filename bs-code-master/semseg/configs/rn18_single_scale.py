@@ -20,7 +20,7 @@ path = os.path.abspath(__file__)
 dir_path = os.path.dirname(path)
 
 evaluating = False
-random_crop_size = 768
+random_crop_size = 448
 
 scale = 1
 mean = [73.15, 82.90, 72.3]
@@ -28,20 +28,24 @@ std = [47.67, 48.49, 47.73]
 mean_rgb = tuple(np.uint8(scale * np.array(mean)))
 
 num_classes = Cityscapes.num_classes
+print(f'Num classes: {num_classes}')    
+
 ignore_id = Cityscapes.num_classes
 class_info = Cityscapes.class_info
 color_info = Cityscapes.color_info
+mapping = Cityscapes.map_to_id
 
 target_size_crops = (random_crop_size, random_crop_size)
 target_size_crops_feats = (random_crop_size // 4, random_crop_size // 4)
-target_size = (2048, 1024)
-target_size_feats = (2048 // 4, 1024 // 4)
+target_size = (1024, 512)
+target_size_feats = (1024 // 4, 512 // 4)
 
 eval_each = 4
 
 
 trans_val = Compose(
     [Open(),
+     RemapLabels(mapping, ignore_id=255, ignore_class=ignore_id),   # remap the labels if they have additional classes or are in color, but you need them in ids  # noqa
      SetTargetSize(target_size=target_size, target_size_feats=target_size_feats),
      Tensor(),
      ]
@@ -56,6 +60,7 @@ else:
          RandomSquareCropAndScale(random_crop_size, ignore_id=num_classes, mean=mean_rgb),
          SetTargetSize(target_size=target_size_crops, target_size_feats=target_size_crops_feats),
          Tensor(),
+         RemapLabels(mapping, ignore_id=255, ignore_class=ignore_id),
          ]
     )
 
