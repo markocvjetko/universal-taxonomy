@@ -1,7 +1,9 @@
+from typing import Any, Tuple
 from torch.utils.data import Dataset
 from pathlib import Path
 from torchvision.datasets import VOCSegmentation
-from src.data.pascal.labels import labels
+from swiftnet.data.pascal.labels import labels
+from swiftnet.data.pascal.img_transforms import *
 import torchvision.transforms.v2 as tt
 import torch
 import numpy
@@ -36,33 +38,45 @@ class PascalVocSegmentation(Dataset):
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
 
-    def __init__(self, root: Path, transforms: lambda x: x, year='2012', image_set='train', download=False, epoch=None, scale=False):
+    def __init__(self, root: Path, transforms: lambda x: x, year='2012', image_set='train', download=False, epoch=None, scale=False, store_original_labels=False):
         self.root = root
         self.transforms = transforms
         self.epoch = epoch
         self.scale = scale
+        self.store_original_labels = store_original_labels
         self.dataset = VOCSegmentation(root=root, year=year, image_set=image_set, download=download)
         print(f'Num images: {len(self.dataset)}')
-        self.img_transforms = tt.Compose([
-            tt.ToImage(),
-            tt.ToDtype(torch.float32, scale=scale),
-        ])
-        self.label_transforms = tt.Compose([
-            tt.PILToTensor()
-        ])
+        # self.img_transforms = tt.Compose([
+        #     tt.ToImage(),
+        #     tt.ToDtype(torch.float32, scale=scale),
+        # ])
+        
 
     def __len__(self):
         return len(self.dataset)
 
     def __getitem__(self, item):
         image, labels = self.dataset[item]
-        ret_dict = {
-            'image': self.img_transforms(image),
-            'labels': self.label_transforms(labels),
-            'original_labels': self.label_transforms(labels)
+        ret_dict = {}
+        
+        if self.store_original_labels:
+            original_labels = labels
+            original_labels = tt.PILToTensor()(original_labels)
+            original_labels = original_labels.squeeze(0)
+            ret_dict['original_labels'] = original_labels
+        
+        image, labels = self.transforms(image, labels)
+        ret_dict['image'] = image
+        ret_dict['labels'] = labels
+        
 
-        }
         if self.epoch is not None:
             ret_dict['epoch'] = int(self.epoch.value)
-            
+
+        #print shapes
+        # print('image', image.shape)
+        # print('labels', labels.shape)
+
+
         return ret_dict
+    

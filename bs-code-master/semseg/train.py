@@ -11,7 +11,6 @@ from time import perf_counter
 
 from semseg.evaluation import evaluate_semseg
 
-
 def import_module(path):
     spec = importlib.util.spec_from_file_location("module", path)
     module = importlib.util.module_from_spec(spec)
@@ -113,7 +112,6 @@ class Trainer:
                 batch_iterator = iter(enumerate(self.loader_train))
                 start_t = perf_counter()
                 for step, batch in batch_iterator:
-                    print(torch.unique(batch['labels']))
                     self.optimizer.zero_grad()
                     loss = self.model.loss(batch)
                     loss.backward()
@@ -143,7 +141,7 @@ class Trainer:
 
 
 parser = argparse.ArgumentParser(description='Detector train')
-parser.add_argument('--config', default='/home/mc/dipl-rad/msc-thesis/bs-code-master/semseg/configs/rn18_single_scale.py', type=str, help='Path to configuration .py file')
+parser.add_argument('--config', default='/workspaces/markoc-haeslerlab/msc-thesis/msc-thesis/bs-code-master/semseg/configs/rn18_quarter_resolution_pascal.py', type=str, help='Path to configuration .py file')
 parser.add_argument('--store_dir', default='saves/', type=str, help='Path to experiments directory')
 parser.add_argument('--resume', default=None, type=str, help='Path to existing experiment dir')
 parser.add_argument('--no-log', dest='log', action='store_false', help='Turn off logging')

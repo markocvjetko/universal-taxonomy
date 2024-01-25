@@ -1,17 +1,24 @@
 from torch.utils.data import DataLoader
 import torch.optim as optim
-import torchvision
 from pathlib import Path
+from swiftnet.data.pascal.pascal import PascalVocSegmentation
 from swiftnet.data.pascal.img_transforms import *
 from swiftnet.models.resnet.resnet_single_scale import resnet18
 from swiftnet.models.semseg import SemsegModel
 from swiftnet.models.loss import SemsegCrossEntropy
 from swiftnet.models.util import get_n_params
+from swiftnet.data.transform import custom_collate
 
-root = Path('/home/mc/dipl-rad/data/voc').resolve()
+#root = Path('/home/mc/dipl-rad/data/voc/').resolve()
+root = Path('/scratch/markoc-haeslerlab/msc-thesis/pascal/')
 
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
+
+# this was used in the concat
+# mean = [0.3141681690198871, 0.32625401858240366, 0.31242337085020083]
+# std = [0.2764082704312526, 0.27861887202239954, 0.2688446443241376]
+
 crop_size = 500
 scale = 1.0
 evaluating = False
@@ -26,23 +33,20 @@ trans_train = Compose([
     RandomCrop(crop_size),
     ToTensors(),
 ])
-#     NormalizeImage(mean, std)
-# ])
 
 trans_val = Compose([
-    SquarePad(crop_size),
-    ScaleToFit(crop_size, crop_size),
+    #SquarePad(crop_size),
+    #ScaleToFit(crop_size, crop_size),
     ToTensors(),
 ])
-#     NormalizeImage(mean, std)
-# ])
 
-class_info = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]#, "ignore"]
-dataset_train = torchvision.datasets.VOCSegmentation(root, transforms=trans_train, image_set="trainval", download=True)
-dataset_train.class_info = class_info
+dataset_train = PascalVocSegmentation(root=root, transforms=trans_train, image_set='train')
+dataset_val = PascalVocSegmentation(root=root, transforms=trans_val, image_set='val', store_original_labels=True)
 
-dataset_val = torchvision.datasets.VOCSegmentation(root, transforms=trans_val, image_set="val", download=True)
-dataset_val.class_info = class_info
+#dataset_train = torch.utils.data.Subset(dataset_train, range(100))
+
+print(dataset_train[0]['image'].max())
+print(dataset_train[0]['image'].min())
 
 labels = set()
 num_classes = 21 # 21 + [255]
@@ -71,8 +75,9 @@ print(f'Batch size: {batch_size}')
 
 loader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=4,
                             pin_memory=True,
-                            drop_last=True)
-loader_val = DataLoader(dataset_val, batch_size=1)
+                            drop_last=True,)
+                            #collate_fn=custom_collate)
+loader_val = DataLoader(dataset_val, batch_size=1,) #collate_fn=custom_collate)
 
 total_params = get_n_params(model.parameters())
 ft_params = get_n_params(model.fine_tune_params())

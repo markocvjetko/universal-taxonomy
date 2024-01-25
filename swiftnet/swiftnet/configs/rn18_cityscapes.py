@@ -15,7 +15,13 @@ from swiftnet.evaluation import StorePreds
 
 from swiftnet.models.util import get_n_params
 
-root = Path.home() / Path('/home/mc/dipl-rad/data/cityscapes/')
+
+#set cuda 2, 3 as visible
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
+#root = Path.home() / Path('/home/mc/dipl-rad/data/cityscapes/')
+root = Path('/scratch/markoc-haeslerlab/msc-thesis/cityscapes/')
+
     # add symbolic link to datasets folder for different datasets
 path = os.path.abspath(__file__)
 dir_path = os.path.dirname(path)
@@ -68,6 +74,7 @@ dataset_val = Cityscapes(root, transforms=trans_val, subset='val')
 
 resnet = resnet18(pretrained=True, efficient=False, mean=mean, std=std, scale=scale)    # we are using resnet pretrained on Imagenet for faster convergence # noqa
 model = SemsegModel(resnet, num_classes)
+
 if evaluating:
     model.load_state_dict(torch.load('weights/rn18_single_scale/model_best.pt'))        # change the path with your model path # noqa
 else:
@@ -87,13 +94,15 @@ else:
     optimizer = optim.Adam(optim_params, betas=(0.9, 0.99))
     lr_scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs, lr_min)
 
-batch_size = 6             # batch size should be reduced if your GPU is not big enough for default configuration
+
+
+batch_size = 24             # batch size should be reduced if your GPU is not big enough for default configuration
 print(f'Batch size: {batch_size}')
 
 if evaluating:
     loader_train = DataLoader(dataset_train, batch_size=1, collate_fn=custom_collate)
 else:
-    loader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=4,
+    loader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=16,
                               pin_memory=True,
                               drop_last=True, collate_fn=custom_collate)
 loader_val = DataLoader(dataset_val, batch_size=1, collate_fn=custom_collate)

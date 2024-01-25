@@ -6,9 +6,9 @@ from PIL import Image as pimg
 from collections import defaultdict
 import warnings
 
-from data.transform import RESAMPLE, RESAMPLE_D
-from data.util import bb_intersection_over_union, crop_and_scale_img
-from data.transform.flow_utils import crop_and_scale_flow
+from swiftnet.data.transform import RESAMPLE, RESAMPLE_D
+from swiftnet.data.util import bb_intersection_over_union, crop_and_scale_img
+from swiftnet.data.transform.flow_utils import crop_and_scale_flow
 
 __all__ = ['create_class_uniform_strategy', 'ClassUniformSquareCropAndScale']
 

@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from PIL import Image as pimg
 
-from data.util import crop_and_scale_img
+from swiftnet.data.util import crop_and_scale_img
 
 '''
 Adapted from https://github.com/NVIDIA/flownet2-pytorch

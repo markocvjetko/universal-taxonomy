@@ -8,7 +8,8 @@ from semseg.models.semseg import SemsegModel
 from semseg.models.loss import SemsegCrossEntropy
 from semseg.models.util import get_n_params
 
-root = Path('./datasets/VOC2012').resolve()
+#root = Path('/home/mc/dipl-rad/data/voc/').resolve()
+root = Path('/scratch/markoc-haeslerlab/msc-thesis/pascal/')
 
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]

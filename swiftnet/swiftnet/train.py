@@ -142,10 +142,11 @@ class Trainer:
 
 
 parser = argparse.ArgumentParser(description='Detector train')
-parser.add_argument('--config', default='/home/mc/dipl-rad/msc-thesis/swiftnet/swiftnet/configs/rn18_pascal.py', type=str, help='Path to configuration .py file')
-parser.add_argument('--store_dir', default='saves/', type=str, help='Path to experiments directory')
+#parser.add_argument('--config', default='/home/mc/dipl-rad/msc-thesis/swiftnet/swiftnet/configs/rn18_pascal.py', type=str, help='Path to configuration .py file')
+parser.add_argument('--config', default='/home/markoc-haeslerlab/msc-thesis/msc-thesis/swiftnet/swiftnet/configs/rn18_cityscapes.py', type=str, help='Path to configuration .py file')
+parser.add_argument('--store_dir', default='/home/markoc-haeslerlab/msc-thesis/saves/', type=str, help='Path to experiments directory')
 parser.add_argument('--resume', default=None, type=str, help='Path to existing experiment dir')
-parser.add_argument('--no-log', dest='log', action='store_false', help='Turn off logging')
+parser.add_argument('--no-log', dest='log', action='store_false', help='Turn off logsging')
 parser.add_argument('--log', dest='log', action='store_true', help='Turn on train evaluation')
 parser.add_argument('--no-eval-train', dest='eval_train', action='store_false', help='Turn off train evaluation')
 parser.add_argument('--eval-train', dest='eval_train', action='store_true', help='Turn on train evaluation')

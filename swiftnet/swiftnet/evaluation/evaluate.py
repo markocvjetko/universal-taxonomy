@@ -66,6 +66,11 @@ def evaluate_semseg(model, data_loader, class_info, observers=()):
             stack.enter_context(ctx_mgr)
         conf_mat = np.zeros((model.num_classes, model.num_classes), dtype=np.uint64)
         for step, batch in tqdm(enumerate(data_loader), total=len(data_loader)):
+            #print all shapes
+            # print('image', batch['image'].shape)
+            # print('labels', batch['labels'].shape)
+            # print('original_labels', batch['original_labels'].shape)
+
             batch['original_labels'] = batch['original_labels'].int().cpu()
             logits, additional = model.do_forward(batch, batch['original_labels'].shape[1:3])
             pred = torch.argmax(logits.data, dim=1).int().cpu()
