@@ -10,6 +10,8 @@ import numpy
 import torchvision
 
 class_info = [label.name for label in labels if label.ignoreInEval is False]
+print(class_info)
+print(len(class_info))
 color_info = [label.color for label in labels if label.ignoreInEval is False]
 
 color_info += [[0, 0, 0]]

@@ -44,7 +44,7 @@ scale = 1.0
 evaluating = False
 eval_each = 4
 
-root = Path('/scratch/markoc-haeslerlab/msc-thesis/pascal/')
+root = Path('./datasets/VOC2012').resolve()
 
 trans_train = pascal_transforms.Compose([
     pascal_transforms.RandomScale(0.7, 1.3),
@@ -78,7 +78,8 @@ pascal_dataset_val.class_info = pascal_class_info
 
 # Cityscapes
 
-root = Path('/scratch/markoc-haeslerlab/msc-thesis/cityscapes/')
+img_format = "ppm"
+root = Path('./datasets/Cityscapes')
 path = os.path.abspath(__file__)
 dir_path = os.path.dirname(path)
 
@@ -122,8 +123,8 @@ trans_train = Compose(
         Tensor(),
         ])
 
-city_dataset_train = Cityscapes(root, transforms=trans_train, subset='train', map_style=True)
-city_dataset_val = Cityscapes(root, transforms=trans_val, subset='val', map_style=True)
+city_dataset_train = Cityscapes(root, transforms=trans_train, subset='train', format=img_format, map_style=False)
+city_dataset_val = Cityscapes(root, transforms=trans_val, subset='val', format=img_format, map_style=False)
 
 
 ################################################################################
@@ -228,13 +229,3 @@ if evaluating:
     # to_color = ColorizeLabels(color_info)
     # to_image = Compose([DenormalizeTh(scale, mean, std), Numpy(), to_color])
     # eval_observers = [StorePreds(store_dir, to_image, to_color)]
-
-
-# #print min max values of the images
-    
-# print(pascal_dataset_train[0][0].min())
-# print(pascal_dataset_train[0][0].max())
-
-# print(len(city_dataset_train))
-# print(city_dataset_train[0]['image'].min())
-# print(city_dataset_train[0]['image'].max())

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from PIL import Image as pimg
 
-from data.transform.flow_utils import readFlow
+from semseg.data.transform.flow_utils import readFlow
 
 RESAMPLE = pimg.BICUBIC
 RESAMPLE_D = pimg.BILINEAR

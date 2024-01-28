@@ -159,3 +159,40 @@ def custom_collate(batch, del_orig_labels=False):
     for k, v in values.items():
         batch[k] = v
     return batch
+
+
+
+def custom_collate_new(batch, del_orig_labels=False):
+    keys = ['target_size', 'target_size_feats', 'alphas', 'target_level']
+    values = {}
+    for k in keys:
+        if k in batch[0]:
+            values[k] = batch[0][k]
+    for b in batch:
+        if del_orig_labels: del b['original_labels']
+        for k in values.keys():
+            if k in b:
+                del b[k]
+        if 'mux_indices' in b:
+            b['mux_indices'] = b['mux_indices'].view(-1)
+
+
+    #print keys of every sample in batch
+    for b in batch:
+        for k in ['subset', 'name']:
+            if k in b:
+                del b[k]
+        
+    # for sample in batch:
+    #     #print all keys and shapes
+    #     for k in sample.keys():
+    #         print(k, sample[k].shape, end=' ')
+    #         print()
+
+    batch = default_collate(batch)
+    # if 'image_next' in batch:
+    #     batch['image'] = torch.cat([batch['image'], batch['image_next']], dim=0).contiguous()
+    #     del batch['image_next']
+    for k, v in values.items():
+        batch[k] = v
+    return batch

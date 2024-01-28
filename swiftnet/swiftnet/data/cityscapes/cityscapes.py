@@ -3,10 +3,10 @@ from pathlib import Path
 
 from swiftnet.data.cityscapes.labels import labels
 
-class_info = [label.name for label in labels if label.ignoreInEval is False]
-color_info = [label.color for label in labels if label.ignoreInEval is False]
-
+class_info = [label.name for label in labels if label.ignoreInTrain is False]
+color_info = [label.color for label in labels if label.ignoreInTrain is False]
 color_info += [[0, 0, 0]]
+num_classes = len(class_info)
 
 map_to_id = {}
 inst_map_to_id = {}
@@ -22,13 +22,18 @@ for label in labels:
 id_to_map = {id: i for i, id in map_to_id.items()}
 inst_id_to_map = {id: i for i, id in inst_map_to_id.items()}
 
+map_to_id2 = {}
+for label in labels:
+    map_to_id2[label.id] = label.trainId
+
 
 class Cityscapes(Dataset):
     class_info = class_info
     color_info = color_info
-    num_classes = 19
+    num_classes = num_classes
 
     map_to_id = map_to_id
+    map_to_id2 = map_to_id2
     id_to_map = id_to_map
 
     inst_map_to_id = inst_map_to_id

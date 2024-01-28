@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import numpy as np
 from PIL import Image as pimg
+import torch
 
 __all__ = ['ExtractInstances', 'RemapLabels', 'ColorizeLabels']
 
@@ -46,6 +47,28 @@ class RemapLabels:
             ret_dict['original_labels'] = pimg.fromarray(self._trans(np.array(example['original_labels'])))
         return {**example, **ret_dict}
 
+class RemapLabels2:
+    def __init__(self, mapping: dict):
+        max_label = max(mapping.keys())
+        remap_array = np.arange(max_label + 1)
+        for k, v in mapping.items():
+            remap_array[k] = v
+        self.mapping = remap_array
+
+
+    def _trans(self, labels):
+        labels = self.mapping[labels].astype(labels.dtype)
+        return labels
+    
+    def __call__(self, example):
+        if not isinstance(example, dict):
+            return self._trans(example)
+        if 'labels' not in example:
+            return example
+        ret_dict = {'labels': pimg.fromarray(self._trans(np.array(example['labels'])))}
+        if 'original_labels' in example:
+            ret_dict['original_labels'] = pimg.fromarray(self._trans(np.array(example['original_labels'])))
+        return {**example, **ret_dict}
 
 class ColorizeLabels:
     def __init__(self, color_info):

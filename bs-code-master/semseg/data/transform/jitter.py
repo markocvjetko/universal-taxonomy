@@ -6,9 +6,9 @@ import numpy as np
 import torch
 from PIL import Image as pimg
 
-from data.transform import RESAMPLE, RESAMPLE_D
-from data.transform.flow_utils import pad_flow, crop_and_scale_flow, flip_flow_horizontal
-from data.util import bb_intersection_over_union, crop_and_scale_img
+from semseg.data.transform import RESAMPLE, RESAMPLE_D
+from semseg.data.transform.flow_utils import pad_flow, crop_and_scale_flow, flip_flow_horizontal
+from semseg.data.util import bb_intersection_over_union, crop_and_scale_img
 
 __all__ = ['Pad', 'PadToFactor', 'Normalize', 'Denormalize', 'DenormalizeTh', 'Resize', 'RandomFlip',
            'RandomSquareCropAndScale', 'ResizeLongerSide', 'Downsample']
