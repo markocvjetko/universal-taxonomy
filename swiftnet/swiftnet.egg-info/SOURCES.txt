@@ -1,5 +1,0 @@
-setup.py
-swiftnet.egg-info/PKG-INFO
-swiftnet.egg-info/SOURCES.txt
-swiftnet.egg-info/dependency_links.txt
-swiftnet.egg-info/top_level.txt
